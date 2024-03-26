@@ -1,0 +1,237 @@
+# Types
+
+## Atom
+
+```elixir
+:error
+```
+
+```elixir
+{:error, reason} = {:error, "file not found"}
+reason
+```
+
+```elixir
+{:ok, msg} = {:ok, "Status 200 OK"}
+msg
+```
+
+## String
+
+```elixir
+name = "Kantum"
+```
+
+```elixir
+is_binary(name)
+```
+
+```elixir
+msg = "Hello " <> name
+```
+
+```elixir
+"Hello " <> pm_name = msg
+pm_name
+```
+
+```elixir
+<<head, rest::binary>> = name
+head
+```
+
+Code point with `?` ⚠️ I'm not sure to understand this. Get the binary representation of the char
+
+```elixir
+head == ?K
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+<<"Ka", rest::binary>> = name
+rest
+```
+
+```elixir
+<<head::binary-size(2), rest::binary>> = name
+head
+```
+
+## Charlist
+
+```elixir
+chars = ~c"Kantum"
+```
+
+```elixir
+~c"Hello " ++ chars
+```
+
+```elixir
+is_list(chars)
+```
+
+```elixir
+?A
+```
+
+## Process
+
+```elixir
+my_pid = self()
+my_pid
+```
+
+## List
+
+Lists are actually linked list. You cannot dereference with [], you can however use a function like Enum.at(list, index)
+
+Enum.<tab> in iex to see all availables function including at/2. The `/2` part is called the arity and tells how many argument the function takes.
+
+`h Enum.at` in iex for help about the function:
+
+```
+iex(2)> h Enum.at
+
+                   def at(enumerable, index, default \\ nil)
+
+  @spec at(t(), index(), default()) :: element() | default()
+
+Finds the element at the given index (zero-based).
+
+Returns default if index is out of bounds.
+
+A negative index can be passed, which means the enumerable is enumerated once
+and the index is counted from the end (for example, -1 finds the last element).
+
+## Examples
+
+    iex> Enum.at([2, 4, 6], 0)
+    2
+
+    iex> Enum.at([2, 4, 6], 2)
+    6
+
+    iex> Enum.at([2, 4, 6], 4)
+    nil
+
+    iex> Enum.at([2, 4, 6], 4, :none)
+    :none
+```
+
+```elixir
+list = ["a", "b", "c"]
+```
+
+```elixir
+list[0]
+```
+
+```elixir
+Enum.at(list, 0)
+```
+
+```elixir
+[first, second, third] = list
+second
+```
+
+```elixir
+[_, _, third] = list
+third
+```
+
+```elixir
+hd(list)
+```
+
+```elixir
+tl(list)
+```
+
+`|` is called cons, it constructs lists, here to have the same behavior as hd() and tl()
+
+```elixir
+[h | t] = list
+t
+```
+
+## Tuple
+
+```elixir
+{a, b} = {1, 2}
+a
+```
+
+```elixir
+{:reply, msg, state} = {:reply, "Bobs found", ["Bobby Lapointe", "Bob dylan", "Bob Ross"]}
+
+state
+```
+
+## Keyword List
+
+```elixir
+data = [a: 1, b: 2]
+```
+
+```elixir
+[{:a, 1}] = [a: 1]
+```
+
+```elixir
+data[:b]
+```
+
+## Map
+
+```elixir
+my_map = %{a: 1, b: 2, c: 3}
+%{a: first, b: second}
+```
+
+```elixir
+my_map.a
+```
+
+If the key is not an atom, we need to the arrow notation `=>`. Still don't know what is this.
+
+```elixir
+map2 = %{"a" => 1, "b" => 2}
+```
+
+```elixir
+%{"b" => b} = map2
+b
+```
+
+```elixir
+map2 = %{map2 | "b" => 4}
+```
+
+```elixir
+my_map = %{my_map | b: 12}
+```
+
+## Struct
+
+`defmodule` and `defstruct` is a macro. Struct are very similar to maps.
+
+```elixir
+defmodule User do
+  defstruct username: "", email: "", age: nil
+end
+```
+
+```elixir
+user1 = %User{username: "Kantum", age: 12, email: "42kantum@gmail.com"}
+```
+
+```elixir
+%{username: username} = user1
+```
+
+```elixir
+%{user1 | age: 42}
+```
