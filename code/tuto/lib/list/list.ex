@@ -38,4 +38,8 @@ defmodule Tuto.List do
   def concat(src, dst), do: concat_func(reverse(src), dst)
   defp concat_func([], dst), do: dst
   defp concat_func([h | t], dst), do: concat_func(t, [h | dst])
+
+  def flat_map(elements, func, acc \\ [])
+  def flat_map([], _, acc), do: acc
+  def flat_map([h | t], func, acc), do: flat_map(t, func, concat(acc, func.(h)))
 end
