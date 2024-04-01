@@ -28,4 +28,9 @@ defmodule Tuto.List do
   def reverse(elements, acc \\ [])
   def reverse([], acc), do: acc
   def reverse([h | t], acc), do: reverse(t, [h | acc])
+
+  @spec map([any()], (any() -> any()), [any()]) :: [any()]
+  def map(elements, func, acc \\ [])
+  def map([], _, acc), do: Enum.reverse(acc)
+  def map([h | t], func, acc), do: map(t, func, [func.(h) | acc])
 end
