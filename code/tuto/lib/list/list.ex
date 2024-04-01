@@ -31,6 +31,11 @@ defmodule Tuto.List do
 
   @spec map([any()], (any() -> any()), [any()]) :: [any()]
   def map(elements, func, acc \\ [])
-  def map([], _, acc), do: Enum.reverse(acc)
+  def map([], _, acc), do: reverse(acc)
   def map([h | t], func, acc), do: map(t, func, [func.(h) | acc])
+
+  @spec concat([any()], [any()]) :: [any()]
+  def concat(src, dst), do: concat_func(reverse(src), dst)
+  defp concat_func([], dst), do: dst
+  defp concat_func([h | t], dst), do: concat_func(t, [h | dst])
 end
