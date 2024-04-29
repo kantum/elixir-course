@@ -1,0 +1,106 @@
+# Elixir in action
+
+## Streams
+
+```elixir
+employees = ["Alice", "Bob", "John"]
+```
+
+```elixir
+Enum.with_index(employees)
+```
+
+Inefficient way:
+
+```elixir
+employees
+|> Enum.with_index()
+|> Enum.each(fn {employees, index} ->
+  IO.puts("#{index + 1}. #{employees}")
+end)
+```
+
+Efficient way, Stream keeps stack the function until the list if finally traversed.
+
+```elixir
+employees
+|> Stream.with_index()
+|> Enum.each(fn {employees, index} ->
+  IO.puts("#{index + 1}. #{employees}")
+end)
+```
+
+This example takes the input list and only prints the square root of elements representing a nonnegative number, adding an indexed prefix at the beginning:
+
+```elixir
+[9, -1, "foo", 25, 49]
+|> Stream.filter(&(is_number(&1) and &1 > 0))
+|> Stream.map(&{&1, :math.sqrt(&1)})
+|> Stream.with_index()
+|> Enum.each(fn {{input, result}, index} ->
+  IO.puts("#{index + 1}. sqrt(#{input}) = #{result}")
+end)
+```
+
+The following function takes a filename and returns the list of all lines from that file that are longer than 80 characters:
+
+```elixir
+defmodule Files do
+  def large_lines!(path) do
+    File.stream!(path)
+    |> Stream.map(&String.trim_trailing(&1, "\n"))
+    |> Enum.filter(&(String.length(&1) > 80))
+  end
+
+  def line_lengths!(path) do
+    File.stream!(path)
+    |> Stream.map(&String.trim_trailing(&1, "\n"))
+    |> Enum.map(&String.length(&1))
+  end
+
+  def longest_line_lengths!(path) do
+    File.stream!(path)
+    |> Stream.map(&String.trim_trailing(&1, "\n"))
+    |> Stream.map(&String.length(&1))
+    |> Enum.max()
+  end
+
+  def longest_line!(path) do
+    File.stream!(path)
+    |> Stream.map(&String.trim_trailing(&1, "\n"))
+    |> Enum.reduce(fn element, acc ->
+      if String.length(element) > String.length(acc) do
+        element
+      else
+        acc
+      end
+    end)
+  end
+
+  def word_per_line!(path) do
+    File.stream!(path)
+    |> Stream.map(&String.trim_trailing(&1, "\n"))
+    |> Enum.map(&Enum.count(String.split(&1)))
+  end
+end
+```
+
+```elixir
+file = "./git/elixir-course/elixir-in-action.livemd"
+```
+
+```elixir
+Files.large_lines!(file)
+```
+
+```elixir
+Files.line_lengths!(file)
+```
+
+```elixir
+Files.longest_line_lengths!(file)
+```
+
+```elixir
+Files.longest_line!(file)
+```
