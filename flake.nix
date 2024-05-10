@@ -22,7 +22,7 @@
       default = pkgs.mkShell {
         packages = with pkgs; [
           figlet
-          elixir
+          elixir_1_16
           gnumake
         ];
         shellHook = ''
